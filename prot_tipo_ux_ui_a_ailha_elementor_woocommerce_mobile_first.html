@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Açailha - Loja Oficial de Açaí (2L e 5L) & Carrinhos para Eventos</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        acai: {
+                            900: '#1F0C2C',
+                            800: '#2D1540',
+                            700: '#3E1F58',
+                            600: '#4A2B70',
+                            500: '#5C3888',
+                            100: '#F4EFF9',
+                            50: '#F9F5FC'
+                        },
+                        lilas: '#C28EE0',
+                        creme: '#F3C06B',
+                        menta: '#3FA382',
+                        mentaLight: '#E8F5F1'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; }
+        .glass-header { background: rgba(45, 21, 64, 0.96); backdrop-filter: blur(12px); }
+        .mosaic-bg {
+            background-image: radial-gradient(#C28EE0 1px, transparent 1px), radial-gradient(#3FA382 1px, #2D1540 1px);
+            background-size: 36px 36px;
+            background-position: 0 0, 18px 18px;
+            opacity: 0.12;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #C28EE0; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3E1F58; }
+        
+        /* Ocultar barra de rolagem mas permitir scroll no mobile */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Simulador de Tela Mobile em Desktop */
+        .mobile-frame-container {
+            transition: all 0.3s ease-in-out;
+        }
+        .mobile-frame-active {
+            max-width: 412px !important;
+            margin: 20px auto !important;
+            border: 12px solid #1f2937 !important;
+            border-radius: 40px !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+            overflow: hidden !important;
+            position: relative;
+        }
+        .mobile-frame-active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 18px;
+            background-color: #1f2937;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-lilas selection:text-acai-800 relative pb-16 md:pb-0">
+
+    <!-- BARRA SUPERIOR DE GUIA + SIMULADOR DE TELA MOBILE -->
+    <div class="bg-amber-400 text-slate-900 text-xs font-semibold py-2 px-3 sm:px-4 sticky top-0 z-50 shadow-md flex justify-between items-center gap-2">
+        <div class="flex items-center gap-1.5 overflow-hidden">
+            <span class="bg-black text-white text-[9px] sm:text-[10px] uppercase font-bold px-2 py-0.5 rounded whitespace-nowrap">Elementor + Woo</span>
+            <span class="text-[11px] truncate hidden xs:inline sm:inline">Açaí (2L & 5L) + Carrinhos para Eventos</span>
+        </div>
+        
+        <div class="flex items-center gap-2 shrink-0">
+            <!-- BOTAO SIMULAR VIEWPORT MOBILE (DESKTOP) -->
+            <button onclick="toggleMobileFrame()" class="bg-slate-800 text-amber-300 hover:bg-black px-2.5 py-1 rounded text-xs font-bold transition flex items-center gap-1">
+                <i class="fa-solid fa-mobile-screen"></i>
+                <span id="frameBtnText" class="hidden sm:inline">Simular Mobile</span>
+            </button>
+            
+            <!-- BOTAO ARQUITETURA DO SITE -->
+            <button onclick="toggleElementorGuide()" class="bg-slate-900 text-white hover:bg-slate-800 px-2.5 py-1 rounded text-xs font-bold transition flex items-center gap-1">
+                <i class="fa-solid fa-cubes text-amber-400"></i>
+                <span id="guideBtnText" class="hidden sm:inline">Guia Elementor</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- WRAPPER PARA O EFEITO DE SIMULAÇÃO DE DISPOSITIVO MOBILE -->
+    <div id="appContainer" class="mobile-frame-container w-full min-h-screen bg-slate-50">
+
+        <!-- TOAST BANNER NOTIFICAÇÃO MOBILE -->
+        <div id="toastNotification" class="fixed top-12 left-1/2 -translate-x-1/2 z-50 bg-emerald-600 text-white px-5 py-3 rounded-full shadow-2xl font-bold text-xs flex items-center gap-2 transform -translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+            <i class="fa-solid fa-circle-check text-base text-amber-300"></i>
+            <span id="toastMessage">Item adicionado com sucesso!</span>
+        </div>
+
+        <!-- PAINEL LATERAL DE ESTRUTURA ELEMENTOR & WOOCOMMERCE -->
+        <aside id="elementorDrawer" class="fixed right-0 top-10 h-[calc(100vh-2.5rem)] w-80 sm:w-96 bg-slate-900 text-white z-50 p-6 overflow-y-auto shadow-2xl transition-transform transform translate-x-full border-l border-slate-700">
+            <div class="flex justify-between items-center border-b border-slate-700 pb-4 mb-4">
+                <h3 class="font-bold text-amber-400 text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-code"></i> Arquitetura do Site
+                </h3>
+                <button onclick="toggleElementorGuide()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+
+            <div class="space-y-6 text-sm text-slate-300">
+                <div>
+                    <h4 class="font-bold text-white mb-2 flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-cart-shopping text-creme"></i> Estrutura E-commerce Mobile
+                    </h4>
+                    <ul class="list-disc pl-4 space-y-1.5 text-xs">
+                        <li><strong>Layout Responsivo:</strong> Grid adaptativo de 1 coluna em smartphones e 3 colunas em telas maiores.</li>
+                        <li><strong>Menu Inferior Fixo:</strong> Barra com acessos rápidos a Loja, Carrinho e WhatsApp.</li>
+                        <li><strong>Menu Hamburguer:</strong> Slide-over leve para navegabilidade sem obstrução.</li>
+                    </ul>
+                </div>
+
+                <div class="border-t border-slate-800 pt-4">
+                    <h4 class="font-bold text-white mb-2 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-umbrella-beach text-menta"></i> Módulo de Carrinhos (B2B)
+                    </h4>
+                    <p class="text-xs text-slate-400">Calculadora interativa adaptada para uso via toque (Touch-friendly slider) com envio direto do orçamento para o WhatsApp.</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MENU NAVEGAÇÃO MOBILE (HAMBURGUER SLIDE-OVER) -->
+        <div id="mobileMenuBackdrop" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/60 z-50 opacity-0 pointer-events-none transition-opacity md:hidden"></div>
+        <aside id="mobileMenuDrawer" class="fixed left-0 top-0 h-full w-4/5 max-w-xs bg-acai-900 text-white z-50 p-6 shadow-2xl transition-transform transform -translate-x-full flex flex-col justify-between md:hidden">
+            <div>
+                <div class="flex justify-between items-center border-b border-acai-700 pb-4 mb-6">
+                    <div class="flex items-center gap-2">
+                        <div class="w-9 h-9 bg-creme rounded-xl flex items-center justify-center text-acai-800 font-black text-lg">
+                            <i class="fa-solid fa-umbrella-beach"></i>
+                        </div>
+                        <span class="text-xl font-black text-white">AÇAILHA</span>
+                    </div>
+                    <button onclick="toggleMobileMenu()" class="text-purple-200 hover:text-white text-xl">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+
+                <nav class="space-y-4 text-sm font-semibold uppercase tracking-wider">
+                    <a href="#loja" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl bg-acai-800 text-creme font-bold">
+                        <i class="fa-solid fa-store text-base text-creme"></i> Loja (Potes 2L e 5L)
+                    </a>
+                    <a href="#eventos-carrinho" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-acai-800 text-purple-100">
+                        <i class="fa-solid fa-cart-flatbed text-base text-menta"></i> Carrinhos p/ Eventos
+                    </a>
+                    <a href="#simulador" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-acai-800 text-purple-100">
+                        <i class="fa-solid fa-calculator text-base text-lilas"></i> Calculadora de Festas
+                    </a>
+                    <a href="#sobre" onclick="toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-xl hover:bg-acai-800 text-purple-100">
+                        <i class="fa-solid fa-circle-info text-base text-slate-300"></i> Sobre a Marca
+                    </a>
+                </nav>
+            </div>
+
+            <div class="pt-6 border-t border-acai-800 space-y-3">
+                <a href="https://wa.me/" target="_blank" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg">
+                    <i class="fa-brands fa-whatsapp text-base"></i> Atendimento WhatsApp
+                </a>
+                <p class="text-[10px] text-center text-purple-300">© Açailha Mix - Açaí Premium</p>
+            </div>
+        </aside>
+
+        <!-- HEADER PRINCIPAL COM HAMBURGER NO MOBILE -->
+        <header class="glass-header text-white sticky top-8 md:top-9 z-40 border-b border-acai-700/60 shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex justify-between items-center">
+                
+                <div class="flex items-center gap-3">
+                    <!-- BOTAO HAMBURGUER VISÍVEL APENAS EM MOBILE -->
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-white p-2 rounded-lg bg-acai-700 hover:bg-acai-600 text-lg border border-acai-600 focus:outline-none">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+
+                    <!-- LOGO AÇAILHA -->
+                    <a href="#" class="flex items-center gap-2.5 sm:gap-3 group">
+                        <div class="w-10 h-10 md:w-12 md:h-12 bg-creme rounded-xl md:rounded-2xl flex items-center justify-center text-acai-800 font-black text-xl md:text-2xl shadow-md border-2 border-white/80 group-hover:scale-105 transition">
+                            <i class="fa-solid fa-umbrella-beach"></i>
+                        </div>
+                        <div>
+                            <span class="text-xl md:text-2xl font-black tracking-wider block leading-none text-white">AÇAILHA</span>
+                            <span class="text-[9px] md:text-[10px] tracking-widest text-creme font-bold uppercase block mt-0.5">Açaí Premium & Eventos</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- NAV LINKS DESKTOP -->
+                <nav class="hidden md:flex items-center gap-8 font-medium text-xs uppercase tracking-wider">
+                    <a href="#loja" class="hover:text-creme transition flex items-center gap-1.5 font-bold text-creme">
+                        <i class="fa-solid fa-store"></i> Loja (Potes 2L & 5L)
+                    </a>
+                    <a href="#eventos-carrinho" class="hover:text-creme transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-cart-flatbed text-menta"></i> Carrinhos para Eventos
+                    </a>
+                    <a href="#simulador" class="hover:text-creme transition">Calculadora de Festas</a>
+                    <a href="#sobre" class="hover:text-creme transition">A Marca</a>
+                </nav>
+
+                <!-- BOTOES E CARRINHO WOOCOMMERCE HEADER -->
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleCartDrawer()" class="relative bg-acai-700 hover:bg-acai-600 border border-lilas/40 text-white p-2.5 md:p-3 rounded-xl transition flex items-center gap-2.5 group">
+                        <div class="relative">
+                            <i class="fa-solid fa-basket-shopping text-base md:text-lg text-creme"></i>
+                            <span id="cartCountBadge" class="absolute -top-2 -right-2.5 bg-emerald-500 text-white text-[10px] font-black rounded-full w-4 h-4 md:w-5 md:h-5 flex items-center justify-center border-2 border-acai-800 shadow">0</span>
+                        </div>
+                        <div class="hidden sm:block text-left text-xs">
+                            <span class="block text-[10px] text-purple-200 leading-none">Meu Carrinho</span>
+                            <span id="cartHeaderTotal" class="font-bold text-creme">R$ 0,00</span>
+                        </div>
+                    </button>
+
+                    <a href="https://wa.me/" target="_blank" class="hidden lg:inline-flex bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition shadow-md items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-base"></i> Atendimento
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- HERO SECTION: OTIMIZADA PARA TOUCH E SMARTPHONES -->
+        <section class="relative bg-gradient-to-b from-acai-800 via-acai-700 to-acai-800 text-white py-10 md:py-20 overflow-hidden">
+            <div class="absolute inset-0 mosaic-bg"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    
+                    <!-- COLUNA TEXTO & CTA MOBILE -->
+                    <div class="lg:col-span-7 space-y-4 md:space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 bg-acai-600/90 border border-lilas/30 px-3 py-1 md:px-4 md:py-1.5 rounded-full text-[11px] md:text-xs font-semibold text-creme shadow-inner">
+                            <i class="fa-solid fa-truck-fast text-menta"></i> Potes de 2 Litros e Caixas de 5 Litros
+                        </div>
+                        
+                        <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight">
+                            O Verdadeiro Açaí Cremoso em <span class="text-transparent bg-clip-text bg-gradient-to-r from-creme via-lilas to-menta">2L e 5L</span>
+                        </h1>
+                        
+                        <p class="text-xs sm:text-base text-purple-100 max-w-2xl font-light leading-relaxed">
+                            Leve para sua casa, estabelecimento ou evento o açaí artesanal da Açailha. Sem cristais de gelo e ultra cremoso.
+                            <span class="block mt-1 font-semibold text-creme italic">"Quem experimenta, sente a diferença."</span>
+                        </p>
+
+                        <!-- DUAL CTA: BOTÕES MOBILE TOUCH-FRIENDLY -->
+                        <div class="pt-2 md:pt-4 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+                            <a href="#loja" class="bg-creme text-acai-800 hover:bg-yellow-400 font-extrabold px-6 py-3.5 rounded-xl shadow-xl transition text-center uppercase tracking-wide text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-bag-shopping text-base"></i> Comprar Açaí (2L ou 5L)
+                            </a>
+                            <a href="#eventos-carrinho" class="bg-white/10 hover:bg-white/20 text-white font-bold px-6 py-3.5 rounded-xl border border-white/20 backdrop-blur-sm transition text-center uppercase tracking-wide text-xs flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-umbrella-beach text-base text-menta"></i> Carrinho para Eventos
+                            </a>
+                        </div>
+
+                        <!-- SELOS DE CONFIANÇA EMBUTIDOS -->
+                        <div class="pt-6 border-t border-purple-800/60 grid grid-cols-3 gap-2 sm:gap-4 text-center">
+                            <div class="p-2 bg-acai-900/40 rounded-xl border border-purple-800/40 flex flex-col items-center">
+                                <i class="fa-solid fa-snowflake text-menta text-lg mb-1"></i>
+                                <h4 class="font-bold text-[11px] text-white leading-tight">Cremosidade Extra</h4>
+                                <p class="text-[9px] text-purple-300">Sem gelo</p>
+                            </div>
+                            <div class="p-2 bg-acai-900/40 rounded-xl border border-purple-800/40 flex flex-col items-center">
+                                <i class="fa-solid fa-box-open text-creme text-lg mb-1"></i>
+                                <h4 class="font-bold text-[11px] text-white leading-tight">2L & 5L</h4>
+                                <p class="text-[9px] text-purple-300">Pote / Caixa</p>
+                            </div>
+                            <div class="p-2 bg-acai-900/40 rounded-xl border border-purple-800/40 flex flex-col items-center">
+                                <i class="fa-solid fa-leaf text-lilas text-lg mb-1"></i>
+                                <h4 class="font-bold text-[11px] text-white leading-tight">Linha Zero</h4>
+                                <p class="text-[9px] text-purple-300">Sem açúcar</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUNA CARDS DE TAMANHOS Destaque -->
+                    <div class="lg:col-span-5 relative">
+                        <div class="bg-acai-900/90 rounded-2xl p-4 sm:p-5 border border-lilas/30 space-y-3 shadow-2xl">
+                            <div class="flex justify-between items-center border-b border-purple-800 pb-2.5">
+                                <span class="text-[11px] font-bold uppercase text-creme tracking-wider"><i class="fa-solid fa-star mr-1"></i> Linha Mais Pedida</span>
+                                <span class="bg-emerald-500 text-white text-[9px] font-black px-2 py-0.5 rounded uppercase">Pronta Entrega</span>
+                            </div>
+
+                            <!-- CARD MINI POTE 5L -->
+                            <div class="bg-acai-800 p-3 rounded-xl border border-purple-700/50 flex items-center gap-3">
+                                <div class="w-12 h-12 bg-creme/20 rounded-xl flex items-center justify-center text-creme text-xl font-black border border-creme/30 shrink-0">
+                                    5L
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="font-extrabold text-xs text-white truncate">Caixa Açaí 5 Litros</h4>
+                                    <p class="text-[10px] text-purple-200">Eventos e famílias grandes</p>
+                                    <div class="font-black text-creme text-xs mt-0.5">R$ 98,00</div>
+                                </div>
+                                <a href="#loja" class="bg-acai-700 hover:bg-acai-600 p-2 rounded-lg text-creme text-xs font-bold">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            </div>
+
+                            <!-- CARD MINI POTE 2L -->
+                            <div class="bg-acai-800 p-3 rounded-xl border border-purple-700/50 flex items-center gap-3">
+                                <div class="w-12 h-12 bg-lilas/20 rounded-xl flex items-center justify-center text-lilas text-xl font-black border border-lilas/30 shrink-0">
+                                    2L
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="font-extrabold text-xs text-white truncate">Pote Açaí 2 Litros</h4>
+                                    <p class="text-[10px] text-purple-200">Ideal para o dia a dia</p>
+                                    <div class="font-black text-creme text-xs mt-0.5">R$ 45,00</div>
+                                </div>
+                                <a href="#loja" class="bg-acai-700 hover:bg-acai-600 p-2 rounded-lg text-creme text-xs font-bold">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO CATALOGO DE PRODUTOS COM SCROLL HORIZONTAL MOBILE -->
+        <section id="loja" class="py-12 md:py-20 bg-slate-50 relative">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-6">
+                    <div>
+                        <span class="text-acai-600 font-bold text-[10px] sm:text-xs uppercase tracking-widest bg-acai-100 px-3 py-1 rounded-full border border-acai-200">Loja Virtual Açailha</span>
+                        <h2 class="text-2xl sm:text-4xl font-black text-slate-900 mt-2">Cardápio Açaí (2L e 5L)</h2>
+                    </div>
+                </div>
+
+                <!-- FILTROS COM DESLIZAMENTO HORIZONTAL SWIPE NO MOBILE -->
+                <div class="flex gap-2 mb-6 overflow-x-auto pb-2 no-scrollbar scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0">
+                    <button onclick="filtrarProdutos('todos')" class="filter-btn active shrink-0 bg-acai-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition shadow-sm">Todos os Produtos</button>
+                    <button onclick="filtrarProdutos('2l')" class="filter-btn shrink-0 bg-white hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold transition border border-slate-200 shadow-sm">Potes de 2 Litros</button>
+                    <button onclick="filtrarProdutos('5l')" class="filter-btn shrink-0 bg-white hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold transition border border-slate-200 shadow-sm">Caixas de 5 Litros</button>
+                    <button onclick="filtrarProdutos('zero')" class="filter-btn shrink-0 bg-white hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-xl text-xs font-bold transition border border-slate-200 shadow-sm">Linha Zero Açúcar</button>
+                </div>
+
+                <!-- GRID DE PRODUTOS RESPONSIVO -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    
+                    <!-- PRODUTO 1: CAIXA 5L TRADICIONAL -->
+                    <div class="product-card item-5l bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition flex flex-col justify-between">
+                        <div>
+                            <div class="h-44 sm:h-52 bg-acai-800 relative flex items-center justify-center p-6">
+                                <span class="absolute top-3 left-3 bg-creme text-acai-800 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">Mais Vendido 5L</span>
+                                <div class="w-28 h-28 sm:w-32 sm:h-32 bg-acai-700 rounded-2xl flex flex-col items-center justify-center text-white border-2 border-creme shadow-xl">
+                                    <span class="text-2xl sm:text-3xl font-black text-creme">5L</span>
+                                    <span class="text-[9px] uppercase font-bold text-purple-200">Caixa Isopor</span>
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <span class="text-[10px] font-bold uppercase text-acai-600 tracking-wider">Atacado & Festas</span>
+                                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg mt-0.5">Caixa Açaí Tradicional 5 Litros</h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Açaí de alta densidade e cremosidade sem pedaços de gelo.
+                                </p>
+                                
+                                <div class="mt-3">
+                                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Escolha o Sabor Base:</label>
+                                    <select id="sabor-1" class="w-full text-xs bg-slate-100 border border-slate-300 rounded-xl p-2.5 font-medium text-slate-800 focus:outline-none focus:border-acai-700">
+                                        <option value="Tradicional com Guaraná">Tradicional com Guaraná</option>
+                                        <option value="Com Polpa de Banana">Com Polpa de Banana</option>
+                                        <option value="Com Polpa de Morango">Com Polpa de Morango</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+                            <div>
+                                <span class="text-[9px] text-slate-400 uppercase font-semibold block">Preço</span>
+                                <span class="font-black text-acai-800 text-xl sm:text-2xl">R$ 98,00</span>
+                            </div>
+                            <button onclick="adicionarAoCarrinho('Caixa Açaí Tradicional 5 Litros', 98.00, '5L', 'sabor-1')" class="bg-acai-800 hover:bg-acai-700 text-white font-bold px-4 py-3 rounded-xl transition text-xs flex items-center gap-2 shadow-md">
+                                <i class="fa-solid fa-cart-plus text-creme"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PRODUTO 2: POTE 2L TRADICIONAL -->
+                    <div class="product-card item-2l bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition flex flex-col justify-between">
+                        <div>
+                            <div class="h-44 sm:h-52 bg-purple-900 relative flex items-center justify-center p-6">
+                                <span class="absolute top-3 left-3 bg-lilas text-acai-800 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">Ideal Família 2L</span>
+                                <div class="w-28 h-28 sm:w-32 sm:h-32 bg-acai-800 rounded-full flex flex-col items-center justify-center text-white border-2 border-lilas shadow-xl">
+                                    <span class="text-2xl sm:text-3xl font-black text-lilas">2L</span>
+                                    <span class="text-[9px] uppercase font-bold text-purple-200">Pote Prático</span>
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <span class="text-[10px] font-bold uppercase text-acai-600 tracking-wider">Uso Doméstico</span>
+                                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg mt-0.5">Pote Açaí Tradicional 2 Litros</h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Perfeito para congelador de casa. Pronto para cumbucas.
+                                </p>
+                                
+                                <div class="mt-3">
+                                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Escolha o Sabor Base:</label>
+                                    <select id="sabor-2" class="w-full text-xs bg-slate-100 border border-slate-300 rounded-xl p-2.5 font-medium text-slate-800 focus:outline-none focus:border-acai-700">
+                                        <option value="Tradicional Cremoso">Tradicional Cremoso</option>
+                                        <option value="Com Leite Condensado Integrado">Com Leite Condensado Integrado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+                            <div>
+                                <span class="text-[9px] text-slate-400 uppercase font-semibold block">Preço</span>
+                                <span class="font-black text-acai-800 text-xl sm:text-2xl">R$ 45,00</span>
+                            </div>
+                            <button onclick="adicionarAoCarrinho('Pote Açaí Tradicional 2 Litros', 45.00, '2L', 'sabor-2')" class="bg-acai-800 hover:bg-acai-700 text-white font-bold px-4 py-3 rounded-xl transition text-xs flex items-center gap-2 shadow-md">
+                                <i class="fa-solid fa-cart-plus text-creme"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PRODUTO 3: CAIXA 5L ZERO AÇÚCAR -->
+                    <div class="product-card item-5l item-zero bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition flex flex-col justify-between">
+                        <div>
+                            <div class="h-44 sm:h-52 bg-emerald-900 relative flex items-center justify-center p-6">
+                                <span class="absolute top-3 left-3 bg-menta text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">Zero Açúcar</span>
+                                <div class="w-28 h-28 sm:w-32 sm:h-32 bg-emerald-800 rounded-2xl flex flex-col items-center justify-center text-white border-2 border-white shadow-xl">
+                                    <span class="text-2xl sm:text-3xl font-black text-white">5L</span>
+                                    <span class="text-[9px] uppercase font-bold text-emerald-200">Zero Açúcar</span>
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <span class="text-[10px] font-bold uppercase text-menta tracking-wider">Linha Saudável / Fit</span>
+                                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg mt-0.5">Caixa Açaí Zero Açúcar 5 Litros</h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Zero adição de açúcares. Adoçado naturalmente.
+                                </p>
+                                
+                                <div class="mt-3">
+                                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Adoçante Base:</label>
+                                    <select id="sabor-3" class="w-full text-xs bg-slate-100 border border-slate-300 rounded-xl p-2.5 font-medium text-slate-800 focus:outline-none focus:border-acai-700">
+                                        <option value="Zero Açúcar Stevia/Xilitol">Zero Açúcar Stevia/Xilitol</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+                            <div>
+                                <span class="text-[9px] text-slate-400 uppercase font-semibold block">Preço</span>
+                                <span class="font-black text-acai-800 text-xl sm:text-2xl">R$ 115,00</span>
+                            </div>
+                            <button onclick="adicionarAoCarrinho('Caixa Açaí Zero Açúcar 5 Litros', 115.00, '5L', 'sabor-3')" class="bg-acai-800 hover:bg-acai-700 text-white font-bold px-4 py-3 rounded-xl transition text-xs flex items-center gap-2 shadow-md">
+                                <i class="fa-solid fa-cart-plus text-creme"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PRODUTO 4: POTE 2L ZERO AÇÚCAR -->
+                    <div class="product-card item-2l item-zero bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition flex flex-col justify-between">
+                        <div>
+                            <div class="h-44 sm:h-52 bg-emerald-800 relative flex items-center justify-center p-6">
+                                <span class="absolute top-3 left-3 bg-menta text-white text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">Zero Açúcar</span>
+                                <div class="w-28 h-28 sm:w-32 sm:h-32 bg-emerald-900 rounded-full flex flex-col items-center justify-center text-white border-2 border-menta shadow-xl">
+                                    <span class="text-2xl sm:text-3xl font-black text-menta">2L</span>
+                                    <span class="text-[9px] uppercase font-bold text-emerald-200">Zero Açúcar</span>
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <span class="text-[10px] font-bold uppercase text-menta tracking-wider">Linha Saudável / Fit</span>
+                                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg mt-0.5">Pote Açaí Zero Açúcar 2 Litros</h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Açaí puro sem adição de sacarose.
+                                </p>
+                                
+                                <div class="mt-3">
+                                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Adoçante Base:</label>
+                                    <select id="sabor-4" class="w-full text-xs bg-slate-100 border border-slate-300 rounded-xl p-2.5 font-medium text-slate-800 focus:outline-none focus:border-acai-700">
+                                        <option value="Zero Açúcar Stevia/Xilitol">Zero Açúcar Stevia/Xilitol</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+                            <div>
+                                <span class="text-[9px] text-slate-400 uppercase font-semibold block">Preço</span>
+                                <span class="font-black text-acai-800 text-xl sm:text-2xl">R$ 52,00</span>
+                            </div>
+                            <button onclick="adicionarAoCarrinho('Pote Açaí Zero Açúcar 2 Litros', 52.00, '2L', 'sabor-4')" class="bg-acai-800 hover:bg-acai-700 text-white font-bold px-4 py-3 rounded-xl transition text-xs flex items-center gap-2 shadow-md">
+                                <i class="fa-solid fa-cart-plus text-creme"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PRODUTO 5: POTE 2L TRUFADO NINHO -->
+                    <div class="product-card item-2l bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-xl transition flex flex-col justify-between">
+                        <div>
+                            <div class="h-44 sm:h-52 bg-amber-900/90 relative flex items-center justify-center p-6">
+                                <span class="absolute top-3 left-3 bg-creme text-acai-800 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">Gourmet Especial</span>
+                                <div class="w-28 h-28 sm:w-32 sm:h-32 bg-acai-800 rounded-full flex flex-col items-center justify-center text-white border-2 border-creme shadow-xl">
+                                    <span class="text-2xl sm:text-3xl font-black text-creme">2L</span>
+                                    <span class="text-[9px] uppercase font-bold text-amber-200">Creme Ninho</span>
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <span class="text-[10px] font-bold uppercase text-amber-600 tracking-wider">Edição Especial</span>
+                                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg mt-0.5">Pote Açaí Trufado com Ninho 2L</h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Mesclado com camadas generosas de creme de leite em pó.
+                                </p>
+                                
+                                <div class="mt-3">
+                                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Recheio Especial:</label>
+                                    <select id="sabor-5" class="w-full text-xs bg-slate-100 border border-slate-300 rounded-xl p-2.5 font-medium text-slate-800 focus:outline-none focus:border-acai-700">
+                                        <option value="Trufado de Leite Ninho">Trufado de Leite Ninho</option>
+                                        <option value="Trufado com Creme de Nutella">Trufado com Creme de Nutella</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+                            <div>
+                                <span class="text-[9px] text-slate-400 uppercase font-semibold block">Preço</span>
+                                <span class="font-black text-acai-800 text-xl sm:text-2xl">R$ 58,00</span>
+                            </div>
+                            <button onclick="adicionarAoCarrinho('Pote Açaí Trufado Leite Ninho 2L', 58.00, '2L', 'sabor-5')" class="bg-acai-800 hover:bg-acai-700 text-white font-bold px-4 py-3 rounded-xl transition text-xs flex items-center gap-2 shadow-md">
+                                <i class="fa-solid fa-cart-plus text-creme"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- PRODUTO 6: COMBO FESTA 5L + KIT TOPPINGS -->
+                    <div class="product-card item-5l bg-white rounded-2xl shadow-sm border-2 border-creme overflow-hidden hover:shadow-xl transition flex flex-col justify-between">
+                        <div>
+                            <div class="h-44 sm:h-52 bg-acai-800 relative flex items-center justify-center p-6">
+                                <span class="absolute top-3 left-3 bg-amber-400 text-slate-900 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider shadow">Kit Combo Festa</span>
+                                <div class="w-28 h-28 sm:w-32 sm:h-32 bg-acai-900 rounded-2xl flex flex-col items-center justify-center text-white border-2 border-creme shadow-xl">
+                                    <span class="text-2xl sm:text-3xl font-black text-creme">5L + Kit</span>
+                                    <span class="text-[9px] uppercase font-bold text-purple-200">Toppings Incl.</span>
+                                </div>
+                            </div>
+                            <div class="p-5">
+                                <span class="text-[10px] font-bold uppercase text-amber-600 tracking-wider">Pronto para Servir</span>
+                                <h3 class="font-extrabold text-slate-900 text-base sm:text-lg mt-0.5">Combo Festa 5L + Toppings</h3>
+                                <p class="text-xs text-slate-500 mt-1.5 leading-relaxed">
+                                    Açaí 5L + Granola, Leite em Pó, Paçoca e Leite Condensado.
+                                </p>
+                                
+                                <div class="mt-3">
+                                    <label class="block text-[11px] font-bold text-slate-700 mb-1">Escolha o Açaí Base:</label>
+                                    <select id="sabor-6" class="w-full text-xs bg-slate-100 border border-slate-300 rounded-xl p-2.5 font-medium text-slate-800 focus:outline-none focus:border-acai-700">
+                                        <option value="Açaí 5L Tradicional">Açaí 5L Tradicional</option>
+                                        <option value="Açaí 5L Zero Açúcar">Açaí 5L Zero Açúcar (+ R$ 15,00)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between gap-3">
+                            <div>
+                                <span class="text-[9px] text-slate-400 uppercase font-semibold block">Combo</span>
+                                <span class="font-black text-acai-800 text-xl sm:text-2xl">R$ 145,00</span>
+                            </div>
+                            <button onclick="adicionarAoCarrinho('Combo Festa 5L + Kit Toppings', 145.00, '5L', 'sabor-6')" class="bg-creme hover:bg-yellow-400 text-acai-800 font-extrabold px-4 py-3 rounded-xl transition text-xs flex items-center gap-2 shadow-md">
+                                <i class="fa-solid fa-cart-plus"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SEÇÃO CARRINHO PARA EVENTOS -->
+        <section id="eventos-carrinho" class="py-12 md:py-20 bg-acai-800 text-white relative overflow-hidden border-t-4 border-creme">
+            <div class="absolute inset-0 mosaic-bg"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                
+                <div class="text-center max-w-3xl mx-auto mb-10 md:mb-16">
+                    <span class="bg-creme text-acai-800 font-extrabold text-[10px] sm:text-xs uppercase tracking-widest px-3 py-1 sm:px-4 sm:py-1.5 rounded-full shadow-md">
+                        <i class="fa-solid fa-umbrella-beach mr-1"></i> Estrutura p/ Festas & Feiras
+                    </span>
+                    <h2 class="text-2xl sm:text-5xl font-black mt-3 text-white">
+                        Carrinhos <span class="text-creme">Açailha</span> no Seu Evento
+                    </h2>
+                    <p class="text-purple-200 text-xs sm:text-sm mt-2 leading-relaxed">
+                        Estrutura completa com ombrelone praiano, autonomia térmica sem necessidade de tomada e suporte para toppings.
+                    </p>
+                </div>
+
+                <!-- PACOTES B2B -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    <div class="bg-acai-700/80 border border-lilas/30 p-5 rounded-2xl backdrop-blur-md">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="bg-menta text-white text-[9px] font-extrabold px-2 py-0.5 rounded uppercase">Pequeno Porte</span>
+                                <h3 class="text-lg font-bold text-white mt-1">Pacote Praia Pequena</h3>
+                            </div>
+                            <span class="text-xl font-black text-creme">30-50 <span class="text-xs text-purple-200 font-normal">pess.</span></span>
+                        </div>
+                        <ul class="mt-3 space-y-1.5 text-xs text-purple-200">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-menta"></i> 1 Carrinho Açailha com Guarda-Sol</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-menta"></i> 2 Caixas de Açaí 5L + 6 Toppings</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-menta"></i> Copos descartáveis e colheres</li>
+                        </ul>
+                        <button onclick="selecionarPacoteEvento('Pacote Praia Pequena (30-50 pessoas)')" class="mt-4 w-full bg-acai-800 hover:bg-acai-900 text-creme font-bold py-3 rounded-xl text-xs uppercase border border-creme/30 transition">
+                            Solicitar Cotação
+                        </button>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-acai-700 to-purple-900 border-2 border-creme p-5 rounded-2xl shadow-xl">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="bg-creme text-acai-800 text-[9px] font-black px-2 py-0.5 rounded uppercase">Empresas & Festas</span>
+                                <h3 class="text-lg font-extrabold text-creme mt-1">Pacote Maresias Corporativo</h3>
+                            </div>
+                            <span class="text-xl font-black text-creme">80-150 <span class="text-xs text-purple-200 font-normal">pess.</span></span>
+                        </div>
+                        <ul class="mt-3 space-y-1.5 text-xs text-purple-200">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-creme"></i> 1 ou 2 Carrinhos Açailha completos</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-creme"></i> Açaí Tradicional + Opção Zero Açúcar</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-creme"></i> Monitor uniformizado por 4h</li>
+                        </ul>
+                        <button onclick="selecionarPacoteEvento('Pacote Maresias Corporativo (80-150 pessoas)')" class="mt-4 w-full bg-creme hover:bg-yellow-400 text-acai-800 font-extrabold py-3 rounded-xl text-xs uppercase shadow-md transition">
+                            Solicitar Cotação
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- CALCULADORA DE FESTAS OTIMIZADA PARA TOUCH SMARTPHONE -->
+        <section id="simulador" class="py-12 bg-acai-900 text-white border-t border-purple-800">
+            <div class="max-w-3xl mx-auto px-4">
+                <div class="bg-acai-800 border border-lilas/30 rounded-2xl p-5 sm:p-8 shadow-2xl">
+                    <div class="text-center mb-6">
+                        <span class="text-creme font-bold text-[10px] uppercase tracking-widest">Simulador Instantâneo</span>
+                        <h3 class="text-xl sm:text-2xl font-black mt-1">Calculadora de Convidados</h3>
+                    </div>
+
+                    <div class="space-y-5">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-purple-200">Convidados:</span>
+                                <span id="guestsVal" class="text-base font-black text-creme bg-acai-900 px-3 py-1 rounded-lg border border-lilas/30">80 Convidados</span>
+                            </div>
+                            <!-- SLIDER COM TARGET DE TOQUE AMPLIZADO -->
+                            <input type="range" id="guestsRange" min="20" max="300" value="80" step="10" oninput="calcularEvento()" class="w-full h-3 bg-acai-900 rounded-lg appearance-none cursor-pointer accent-creme">
+                        </div>
+
+                        <div class="bg-acai-900 p-4 rounded-xl border border-menta/40 space-y-3">
+                            <div>
+                                <span class="text-[9px] text-purple-300 uppercase font-bold block">Recomendação Açailha:</span>
+                                <h4 id="calcResultado" class="text-xs sm:text-sm font-bold text-emerald-400">4 Caixas de Açaí 5L (20 Litros) + 1 Carrinho Temático</h4>
+                            </div>
+                            <button onclick="enviarSimulacaoWhats()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl text-xs uppercase tracking-wider transition flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-base"></i> Cotar via WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DRAWER / SLIDE-OVER DO CARRINHO WOOCOMMERCE -->
+        <div id="cartDrawerBackdrop" onclick="toggleCartDrawer()" class="fixed inset-0 bg-black/60 z-50 opacity-0 pointer-events-none transition-opacity"></div>
+        <aside id="cartDrawer" class="fixed right-0 top-0 h-full w-full sm:w-96 bg-white z-50 shadow-2xl transition-transform transform translate-x-full flex flex-col justify-between">
+            <!-- HEADER CARRINHO -->
+            <div class="p-4 bg-acai-800 text-white flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-basket-shopping text-creme"></i>
+                    <h3 class="font-extrabold text-sm sm:text-base">Seu Carrinho de Compras</h3>
+                </div>
+                <button onclick="toggleCartDrawer()" class="text-purple-200 hover:text-white p-1 text-xl"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- LISTA DE ITENS -->
+            <div id="cartItemsContainer" class="p-4 flex-1 overflow-y-auto space-y-3">
+                <div id="emptyCartMsg" class="text-center py-12 text-slate-400">
+                    <i class="fa-solid fa-cart-flatbed text-4xl mb-3 text-slate-300"></i>
+                    <p class="text-xs">Seu carrinho está vazio.</p>
+                    <p class="text-[10px] text-slate-400 mt-1">Escolha seus potes de 2L ou 5L acima!</p>
+                </div>
+            </div>
+
+            <!-- FOOTER CARRINHO -->
+            <div class="p-4 bg-slate-50 border-t border-slate-200 space-y-3">
+                <div class="flex justify-between items-center text-sm font-bold text-slate-800">
+                    <span>Total dos Produtos:</span>
+                    <span id="cartDrawerTotal" class="text-lg sm:text-xl font-black text-acai-800">R$ 0,00</span>
+                </div>
+                
+                <button onclick="finalizarCompraWooCommerce()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold py-3.5 rounded-xl text-xs uppercase shadow-lg transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-lock"></i> Finalizar Pedido (WhatsApp)
+                </button>
+            </div>
+        </aside>
+
+        <!-- FOOTER DA MARCA -->
+        <footer id="sobre" class="bg-acai-900 text-white py-10 border-t border-acai-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 pb-6 border-b border-purple-950 text-xs">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-7 h-7 bg-creme rounded-lg flex items-center justify-center text-acai-800 font-bold">
+                                <i class="fa-solid fa-umbrella-beach"></i>
+                            </div>
+                            <span class="text-base font-black">AÇAILHA</span>
+                        </div>
+                        <p class="text-purple-300 leading-relaxed text-[11px]">
+                            Açaí artesanal cremoso em potes de 2L e caixas de 5L.
+                        </p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-creme uppercase tracking-wider mb-2">Produtos</h4>
+                        <ul class="space-y-1 text-purple-300 text-[11px]">
+                            <li><a href="#loja" class="hover:text-white">Caixas de 5 Litros</a></li>
+                            <li><a href="#loja" class="hover:text-white">Potes de 2 Litros</a></li>
+                            <li><a href="#loja" class="hover:text-white">Linha Zero Açúcar</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-creme uppercase tracking-wider mb-2">Eventos</h4>
+                        <ul class="space-y-1 text-purple-300 text-[11px]">
+                            <li><a href="#eventos-carrinho" class="hover:text-white">Carrinhos Praianos</a></li>
+                            <li><a href="#simulador" class="hover:text-white">Calculadora de Festas</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-creme uppercase tracking-wider mb-2">Contato</h4>
+                        <p class="text-purple-300 text-[11px]"><i class="fa-solid fa-envelope text-menta mr-1"></i> contato@acailha.com.br</p>
+                        <p class="text-purple-300 text-[11px] mt-1"><i class="fa-solid fa-phone text-menta mr-1"></i> (11) 99999-8888</p>
+                    </div>
+                </div>
+
+                <div class="pt-4 text-center text-[10px] text-purple-400">
+                    &copy; 2026 Açailha Mix - Protótipo UX/UI Mobile-First (Elementor + WooCommerce).
+                </div>
+            </div>
+        </footer>
+
+    </div><!-- FIM DO APP CONTAINER -->
+
+    <!-- BARRA FIXA NAVEGAÇÃO INFERIOR PARA DISPOSITIVOS MOBILE (APP-LIKE) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-acai-900 border-t border-acai-700 z-40 px-3 py-2 text-white flex justify-around items-center shadow-2xl backdrop-blur-lg">
+        <a href="#loja" class="flex flex-col items-center text-purple-200 hover:text-creme transition">
+            <i class="fa-solid fa-store text-base"></i>
+            <span class="text-[9px] mt-0.5 font-bold">Loja</span>
+        </a>
+        <a href="#eventos-carrinho" class="flex flex-col items-center text-purple-200 hover:text-creme transition">
+            <i class="fa-solid fa-cart-flatbed text-base text-menta"></i>
+            <span class="text-[9px] mt-0.5 font-bold">Eventos</span>
+        </a>
+        <button onclick="toggleCartDrawer()" class="flex flex-col items-center text-creme relative">
+            <div class="relative">
+                <i class="fa-solid fa-basket-shopping text-lg"></i>
+                <span id="mobileBottomCartBadge" class="absolute -top-1 -right-2 bg-emerald-500 text-white text-[8px] font-black rounded-full w-3.5 h-3.5 flex items-center justify-center">0</span>
+            </div>
+            <span class="text-[9px] mt-0.5 font-bold">Carrinho</span>
+        </button>
+        <a href="#simulador" class="flex flex-col items-center text-purple-200 hover:text-creme transition">
+            <i class="fa-solid fa-calculator text-base text-lilas"></i>
+            <span class="text-[9px] mt-0.5 font-bold">Simular</span>
+        </a>
+        <a href="https://wa.me/" target="_blank" class="flex flex-col items-center text-emerald-400 font-bold">
+            <i class="fa-brands fa-whatsapp text-lg"></i>
+            <span class="text-[9px] mt-0.5">Whats</span>
+        </a>
+    </nav>
+
+    <script>
+        let carrinho = [];
+
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            toastMsg.innerText = message;
+            toast.classList.remove('-translate-y-20', 'opacity-0', 'pointer-events-none');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('-translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        function toggleMobileFrame() {
+            const container = document.getElementById('appContainer');
+            const btnText = document.getElementById('frameBtnText');
+            
+            if (container.classList.contains('mobile-frame-active')) {
+                container.classList.remove('mobile-frame-active');
+                btnText.innerText = 'Simular Mobile';
+            } else {
+                container.classList.add('mobile-frame-active');
+                btnText.innerText = 'Ver Desktop';
+                showToast("Modo de visualização mobile (smartphone) ativado!");
+            }
+        }
+
+        function toggleElementorGuide() {
+            const drawer = document.getElementById('elementorDrawer');
+            const btnText = document.getElementById('guideBtnText');
+            if (drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+                btnText.innerText = 'Fechar';
+            } else {
+                drawer.classList.add('translate-x-full');
+                btnText.innerText = 'Guia Elementor';
+            }
+        }
+
+        function toggleMobileMenu() {
+            const drawer = document.getElementById('mobileMenuDrawer');
+            const backdrop = document.getElementById('mobileMenuBackdrop');
+            if (drawer.classList.contains('-translate-x-full')) {
+                drawer.classList.remove('-translate-x-full');
+                backdrop.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.add('-translate-x-full');
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cartDrawer');
+            const backdrop = document.getElementById('cartDrawerBackdrop');
+            if (drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+                backdrop.classList.remove('opacity-0', 'pointer-events-none');
+            } else {
+                drawer.classList.add('translate-x-full');
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        function adicionarAoCarrinho(nome, preco, tamanho, selectId) {
+            const sabor = document.getElementById(selectId).value;
+            const itemExistente = carrinho.find(i => i.nome === nome && i.sabor === sabor);
+
+            if (itemExistente) {
+                itemExistente.qtd++;
+            } else {
+                carrinho.push({
+                    id: Date.now(),
+                    nome: nome,
+                    preco: preco,
+                    tamanho: tamanho,
+                    sabor: sabor,
+                    qtd: 1
+                });
+            }
+
+            atualizarInterfaceCarrinho();
+            showToast(`${nome} adicionado!`);
+        }
+
+        function alterarQtd(id, delta) {
+            const item = carrinho.find(i => i.id === id);
+            if (item) {
+                item.qtd += delta;
+                if (item.qtd <= 0) {
+                    carrinho = carrinho.filter(i => i.id !== id);
+                }
+            }
+            atualizarInterfaceCarrinho();
+        }
+
+        function atualizarInterfaceCarrinho() {
+            const itemsContainer = document.getElementById('cartItemsContainer');
+            const emptyMsg = document.getElementById('emptyCartMsg');
+            const countBadge = document.getElementById('cartCountBadge');
+            const mobileBottomBadge = document.getElementById('mobileBottomCartBadge');
+            const headerTotal = document.getElementById('cartHeaderTotal');
+            const drawerTotal = document.getElementById('cartDrawerTotal');
+
+            let totalPreco = 0;
+            let totalQtd = 0;
+
+            if (carrinho.length === 0) {
+                itemsContainer.innerHTML = '';
+                itemsContainer.appendChild(emptyMsg);
+                emptyMsg.style.display = 'block';
+            } else {
+                emptyMsg.style.display = 'none';
+                itemsContainer.innerHTML = '';
+
+                carrinho.forEach(item => {
+                    totalPreco += item.preco * item.qtd;
+                    totalQtd += item.qtd;
+
+                    const div = document.createElement('div');
+                    div.className = 'bg-slate-100 p-3 rounded-xl border border-slate-200 flex justify-between items-center text-xs';
+                    div.innerHTML = `
+                        <div class="pr-2">
+                            <span class="font-extrabold text-slate-800 block truncate max-w-[170px]">${item.nome}</span>
+                            <span class="text-[10px] text-slate-500 font-medium block truncate max-w-[170px]">Opção: ${item.sabor}</span>
+                            <span class="font-black text-acai-800 text-xs sm:text-sm">R$ ${(item.preco * item.qtd).toFixed(2).replace('.', ',')}</span>
+                        </div>
+                        <div class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-lg border border-slate-300 shrink-0">
+                            <button onclick="alterarQtd(${item.id}, -1)" class="text-slate-600 hover:text-red-500 font-bold px-1.5 py-0.5 text-sm">-</button>
+                            <span class="font-bold text-slate-800 text-xs">${item.qtd}</span>
+                            <button onclick="alterarQtd(${item.id}, 1)" class="text-slate-600 hover:text-emerald-600 font-bold px-1.5 py-0.5 text-sm">+</button>
+                        </div>
+                    `;
+                    itemsContainer.appendChild(div);
+                });
+            }
+
+            countBadge.innerText = totalQtd;
+            if (mobileBottomBadge) mobileBottomBadge.innerText = totalQtd;
+            headerTotal.innerText = `R$ ${totalPreco.toFixed(2).replace('.', ',')}`;
+            drawerTotal.innerText = `R$ ${totalPreco.toFixed(2).replace('.', ',')}`;
+        }
+
+        function filtrarProdutos(categoria) {
+            const cards = document.querySelectorAll('.product-card');
+            const btns = document.querySelectorAll('.filter-btn');
+
+            btns.forEach(b => {
+                b.classList.remove('bg-acai-800', 'text-white');
+                b.classList.add('bg-white', 'text-slate-700');
+            });
+
+            event.target.classList.remove('bg-white', 'text-slate-700');
+            event.target.classList.add('bg-acai-800', 'text-white');
+
+            cards.forEach(card => {
+                if (categoria === 'todos') {
+                    card.style.display = 'flex';
+                } else if (categoria === '2l' && card.classList.contains('item-2l')) {
+                    card.style.display = 'flex';
+                } else if (categoria === '5l' && card.classList.contains('item-5l')) {
+                    card.style.display = 'flex';
+                } else if (categoria === 'zero' && card.classList.contains('item-zero')) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function calcularEvento() {
+            const convidados = document.getElementById('guestsRange').value;
+            document.getElementById('guestsVal').innerText = `${convidados} Convidados`;
+            
+            const litrosNecessarios = Math.ceil(convidados * 0.25);
+            const caixas5L = Math.ceil(litrosNecessarios / 5);
+
+            document.getElementById('calcResultado').innerText = `${caixas5L} Caixa(s) de Açaí 5L (${caixas5L * 5} Litros) + 1 Carrinho Açailha Temático`;
+        }
+
+        function selecionarPacoteEvento(nomePacote) {
+            document.getElementById('simulador').scrollIntoView({ behavior: 'smooth' });
+            showToast(`Pacote "${nomePacote}" selecionado!`);
+        }
+
+        function enviarSimulacaoWhats() {
+            const convidados = document.getElementById('guestsRange').value;
+            const estimativa = document.getElementById('calcResultado').innerText;
+
+            const texto = `Olá! Gostaria de consultar a disponibilidade para o Carrinho de Açaí do meu Evento:\n\n` +
+                          `• Convidados: ${convidados} pessoas\n` +
+                          `• Estimativa: ${estimativa}\n\n` +
+                          `Poderiam me passar os valores e condições de entrega?`;
+
+            window.open(`https://api.whatsapp.com/send?phone=5511999998888&text=${encodeURIComponent(texto)}`, '_blank');
+        }
+
+        function finalizarCompraWooCommerce() {
+            if (carrinho.length === 0) {
+                showToast("Seu carrinho está vazio!");
+                return;
+            }
+            
+            let resumo = "Olá! Gostaria de finalizar o pedido dos seguintes potes de Açaí:\n\n";
+            carrinho.forEach(item => {
+                resumo += `• ${item.qtd}x ${item.nome} (${item.sabor}) - R$ ${(item.preco * item.qtd).toFixed(2)}\n`;
+            });
+            const total = document.getElementById('cartDrawerTotal').innerText;
+            resumo += `\n*Total:* ${total}\n\nPor favor, confirmem a entrega e chave PIX!`;
+
+            window.open(`https://api.whatsapp.com/send?phone=5511999998888&text=${encodeURIComponent(resumo)}`, '_blank');
+        }
+    </script>
+
+</body>
+</html>
